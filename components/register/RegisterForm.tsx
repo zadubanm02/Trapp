@@ -3,10 +3,20 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "next/router";
+import {
+  isFormValid,
+  validateForm,
+  Validation,
+} from "../../validations/authValidations";
 
 const RegisterForm = () => {
   const { register } = useAuth();
   const router = useRouter();
+  const [validations, setValidations] = useState<Validation>({
+    email: null,
+    password: null,
+    fullName: null,
+  });
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -27,8 +37,9 @@ const RegisterForm = () => {
   };
 
   const submit = () => {
-    console.log("State", form);
-    register(form);
+    const valid = validateForm(form);
+    setValidations(valid);
+    isFormValid(valid) && register(form);
   };
 
   return (
@@ -43,7 +54,11 @@ const RegisterForm = () => {
           id="fullName"
           onChange={(e) => handleInputChange(e)}
           value={form.fullName}
+          aria-label="fullName"
         />
+        {validations.fullName && (
+          <p className="text-red-400 text-xs mt-2">{validations.fullName}</p>
+        )}
         <Spacer y={1} />
         <Input
           bordered
@@ -52,7 +67,11 @@ const RegisterForm = () => {
           id="email"
           onChange={(e) => handleInputChange(e)}
           value={form.email}
+          aria-label="email"
         />
+        {validations.email && (
+          <p className="text-red-400 text-xs mt-2">{validations.email}</p>
+        )}
         <Spacer y={1} />
         <Input.Password
           bordered
@@ -60,7 +79,11 @@ const RegisterForm = () => {
           id="password"
           onChange={(e) => handleInputChange(e)}
           value={form.password}
+          aria-label="password"
         />
+        {validations.password && (
+          <p className="text-red-400 text-xs mt-2">{validations.password}</p>
+        )}
         <Spacer y={1} />
         <Button size={"lg"} onPress={() => submit()}>
           Register

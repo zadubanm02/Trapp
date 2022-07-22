@@ -4,10 +4,19 @@ import Image from "next/image";
 import { useAuth } from "../../hooks/useAuth";
 import register from "../../pages/register";
 import { useRouter } from "next/router";
+import {
+  isFormValid,
+  validateForm,
+  Validation,
+} from "../../validations/authValidations";
 
 const LoginForm = () => {
   const { login } = useAuth();
   const router = useRouter();
+  const [validations, setValidations] = useState<Validation>({
+    email: null,
+    password: null,
+  });
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -24,8 +33,9 @@ const LoginForm = () => {
   };
 
   const submit = () => {
-    console.log("State", form);
-    login(form);
+    const valid = validateForm(form);
+    setValidations(valid);
+    isFormValid(valid) && login(form);
   };
   return (
     <div className=" ">
@@ -41,6 +51,9 @@ const LoginForm = () => {
           value={form.email}
           aria-label="email"
         />
+        {validations.email && (
+          <p className="text-red-400 text-xs mt-2">{validations.email}</p>
+        )}
         <Spacer y={1} />
         <Input.Password
           bordered
@@ -50,6 +63,9 @@ const LoginForm = () => {
           value={form.password}
           aria-label="password"
         />
+        {validations.password && (
+          <p className="text-red-400 text-xs mt-2">{validations.password}</p>
+        )}
         <Spacer y={1} />
         <Text className="text-right" color="primary">
           Forgot password ?
