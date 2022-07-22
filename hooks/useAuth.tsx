@@ -1,6 +1,7 @@
 import { User } from "firebase/auth";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
 import {
   LoginData,
   loginWithEmail,
@@ -10,31 +11,50 @@ import {
 } from "../firebase/auth";
 import { authAtom } from "../state/auth";
 
-export const useAuth = async () => {
+export const useAuth = () => {
   const [user, setUser] = useAtom(authAtom);
   const [error, setError] = useState<unknown | null>(null);
+  const router = useRouter();
+  const { pathname } = router;
 
-  const login = async (user: LoginData): Promise<void> => {
-    try {
-      const result = await loginWithEmail(user);
-      setUser(result);
-    } catch (err) {
-      setError(err);
-    }
-  };
+  const notLoggedRoutes = ["register", "login"];
 
-  const register = async (user: RegisterData): Promise<void> => {
-    try {
-      const result = await registerWithEmail(user);
-      setUser(result);
-    } catch (err) {
-      setError(err);
-    }
-  };
+  const login = useCallback(
+    async (user: LoginData): Promise<void> => {
+      try {
+        const result = await loginWithEmail(user);
+        setUser(result);
+      } catch (err) {
+        setError(err);
+      }
+    },
+    [setUser]
+  );
 
-  const logOut = () => {
+  const register = useCallback(
+    async (user: RegisterData): Promise<void> => {
+      try {
+        const result = await registerWithEmail(user);
+        setUser(result);
+      } catch (err) {
+        setError(err);
+      }
+    },
+    [setUser]
+  );
+
+  const logOut = useCallback(() => {
     logout();
-  };
+    setUser(null);
+    router.push("/login");
+  }, [setUser]);
+
+  useEffect(() => {
+    if (user) {
+      console.log("USER", user, router);
+      router.push("/home");
+    }
+  }, [user]);
 
   return {
     user,

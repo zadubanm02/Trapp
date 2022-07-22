@@ -5,7 +5,7 @@ const initialAtom = atom<User | null>(null);
 
 const authAtom = atom(
   (get) => get(initialAtom),
-  (_get, set, newState: User) => {
+  (_get, set, newState: User | null) => {
     set(initialAtom, newState);
   }
 );

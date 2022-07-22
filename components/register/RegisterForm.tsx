@@ -1,20 +1,70 @@
-import { Button, Input, Spacer, Text } from "@nextui-org/react";
-import React from "react";
+import { Button, FormElement, Input, Spacer, Text } from "@nextui-org/react";
+import React, { useState } from "react";
 import Image from "next/image";
+import { useAuth } from "../../hooks/useAuth";
+import { useRouter } from "next/router";
 
 const RegisterForm = () => {
+  const { register } = useAuth();
+  const router = useRouter();
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<FormElement>) => {
+    const { id, value } = e.target;
+    if (id === "fullName") {
+      setForm((form) => ({ ...form, fullName: value }));
+    }
+    if (id === "email") {
+      setForm((form) => ({ ...form, email: value }));
+    }
+    if (id === "password") {
+      setForm((form) => ({ ...form, password: value }));
+    }
+  };
+
+  const submit = () => {
+    console.log("State", form);
+    register(form);
+  };
+
   return (
     <div className=" ">
       <h2 className="font-bold text-5xl text-center">Welcome !</h2>
       <Spacer y={3} />
       <div className="flex flex-col">
-        <Input bordered width="23rem" placeholder="Full name" />
+        <Input
+          bordered
+          width="23rem"
+          placeholder="Full name"
+          id="fullName"
+          onChange={(e) => handleInputChange(e)}
+          value={form.fullName}
+        />
         <Spacer y={1} />
-        <Input bordered width="23rem" placeholder="Email" />
+        <Input
+          bordered
+          width="23rem"
+          placeholder="Email"
+          id="email"
+          onChange={(e) => handleInputChange(e)}
+          value={form.email}
+        />
         <Spacer y={1} />
-        <Input.Password bordered placeholder="Passowrd" />
+        <Input.Password
+          bordered
+          placeholder="Passowrd"
+          id="password"
+          onChange={(e) => handleInputChange(e)}
+          value={form.password}
+        />
         <Spacer y={1} />
-        <Button size={"lg"}> Register </Button>
+        <Button size={"lg"} onPress={() => submit()}>
+          Register
+        </Button>
         <Spacer y={1} />
         <Text
           css={{
@@ -51,10 +101,12 @@ const RegisterForm = () => {
         </Text>
         <Spacer y={1} />
         <Text
+          onClick={() => router.push("/login")}
           color="primary"
           css={{
             textAlign: "center",
           }}
+          className="cursor-pointer"
         >
           Login
         </Text>
