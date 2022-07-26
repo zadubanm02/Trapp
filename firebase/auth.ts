@@ -5,6 +5,9 @@ import {
   sendPasswordResetEmail,
   signOut,
   User,
+  GoogleAuthProvider,
+  signInWithPopup,
+  FacebookAuthProvider,
 } from "firebase/auth";
 
 import { addDoc, collection, getFirestore } from "firebase/firestore";
@@ -12,6 +15,54 @@ import { app } from ".";
 
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+const provider = new GoogleAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
+provider.setCustomParameters({ prompt: "select_account" });
+
+const registerWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    await addDoc(collection(db, "users"), {
+      uid: user.uid,
+      displayName: user.displayName,
+      authProvider: "google",
+      email: user.email,
+    });
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const registerWithFacebook = async () => {
+  try {
+    const result = await signInWithPopup(auth, facebookProvider);
+    console.log("RESULT in AUTH.ts", result);
+    const user = result.user;
+    await addDoc(collection(db, "users"), {
+      uid: user.uid,
+      displayName: user.displayName,
+      authProvider: "facebook",
+      email: user.email,
+    });
+    return user;
+  } catch (error) {
+    console.log("RESULT in AUTH.ts", { error });
+    throw error;
+  }
+};
+
+const loginWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export interface LoginData {
   email: string;
@@ -32,7 +83,7 @@ const registerWithEmail = async ({
     const user = result.user;
     await addDoc(collection(db, "users"), {
       uid: user.uid,
-      fullName,
+      displayName: fullName,
       authProvider: "local",
       email,
     });
@@ -67,4 +118,12 @@ const logout = () => {
   signOut(auth);
 };
 
-export { registerWithEmail, loginWithEmail, sendPasswordReset, logout };
+export {
+  registerWithEmail,
+  loginWithEmail,
+  sendPasswordReset,
+  logout,
+  loginWithGoogle,
+  registerWithGoogle,
+  registerWithFacebook,
+};

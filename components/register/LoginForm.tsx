@@ -2,7 +2,6 @@ import { Button, FormElement, Input, Spacer, Text } from "@nextui-org/react";
 import React, { useState } from "react";
 import Image from "next/image";
 import { useAuth } from "../../hooks/useAuth";
-import register from "../../pages/register";
 import { useRouter } from "next/router";
 import {
   isFormValid,
@@ -11,7 +10,7 @@ import {
 } from "../../validations/authValidations";
 
 const LoginForm = () => {
-  const { login } = useAuth();
+  const { login, loginWithGoogleProvider } = useAuth();
   const router = useRouter();
   const [validations, setValidations] = useState<Validation>({
     email: null,
@@ -88,6 +87,8 @@ const LoginForm = () => {
             src={require("../../assets/googleIcon.png")}
             height={48}
             alt="Google"
+            className="cursor-pointer"
+            onClick={() => loginWithGoogleProvider()}
           />
           <Image
             src={require("../../assets/facebookIcon.png")}

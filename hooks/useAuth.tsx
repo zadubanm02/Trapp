@@ -8,6 +8,9 @@ import {
   logout,
   RegisterData,
   registerWithEmail,
+  loginWithGoogle,
+  registerWithGoogle,
+  registerWithFacebook,
 } from "../firebase/auth";
 import { authAtom } from "../state/auth";
 
@@ -15,9 +18,6 @@ export const useAuth = () => {
   const [user, setUser] = useAtom(authAtom);
   const [error, setError] = useState<unknown | null>(null);
   const router = useRouter();
-  const { pathname } = router;
-
-  const notLoggedRoutes = ["register", "login"];
 
   const login = useCallback(
     async (user: LoginData): Promise<void> => {
@@ -30,6 +30,36 @@ export const useAuth = () => {
     },
     [setUser]
   );
+
+  const registerWithGoogleProvider = useCallback(async (): Promise<void> => {
+    try {
+      const result = await registerWithGoogle();
+      console.log("RESULT", result);
+      setUser(result);
+    } catch (err) {
+      setError(err);
+    }
+  }, [setUser]);
+
+  const registerWithFacebookProvider = useCallback(async (): Promise<void> => {
+    try {
+      const result = await registerWithFacebook();
+      console.log("RESULT", result);
+      setUser(result);
+    } catch (err) {
+      setError(err);
+    }
+  }, [setUser]);
+
+  const loginWithGoogleProvider = useCallback(async (): Promise<void> => {
+    try {
+      const result = await loginWithGoogle();
+      console.log("RESULT", result);
+      setUser(result);
+    } catch (err) {
+      setError(err);
+    }
+  }, [setUser]);
 
   const register = useCallback(
     async (user: RegisterData): Promise<void> => {
@@ -61,6 +91,9 @@ export const useAuth = () => {
     error,
     login,
     register,
+    loginWithGoogleProvider,
+    registerWithGoogleProvider,
+    registerWithFacebookProvider,
     logOut,
   };
 };

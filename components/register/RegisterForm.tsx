@@ -10,7 +10,8 @@ import {
 } from "../../validations/authValidations";
 
 const RegisterForm = () => {
-  const { register } = useAuth();
+  const { register, registerWithGoogleProvider, registerWithFacebookProvider } =
+    useAuth();
   const router = useRouter();
   const [validations, setValidations] = useState<Validation>({
     email: null,
@@ -102,11 +103,15 @@ const RegisterForm = () => {
             src={require("../../assets/googleIcon.png")}
             height={48}
             alt="Google"
+            className="cursor-pointer"
+            onClick={() => registerWithGoogleProvider()}
           />
           <Image
             src={require("../../assets/facebookIcon.png")}
             width={48}
             alt="Facebook"
+            className="cursor-pointer"
+            onClick={() => registerWithFacebookProvider()}
           />
           <Image
             src={require("../../assets/appleIcon.png")}
@@ -139,3 +144,6 @@ const RegisterForm = () => {
 };
 
 export default RegisterForm;
+function registerWithGoogleProvider(): void {
+  throw new Error("Function not implemented.");
+}
