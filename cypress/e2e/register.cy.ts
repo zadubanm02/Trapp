@@ -1,3 +1,7 @@
+import { data } from "../utils";
+
+const { fullName, email, password } = data.registerData;
+
 describe("Register page tests", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000/register");
@@ -22,9 +26,9 @@ describe("Register page tests", () => {
   });
 
   it("Success registration", () => {
-    cy.get("#fullName").type("John Doe");
-    cy.get("#email").type("john.doe@gmail.com");
-    cy.get("#password").type("Password123*");
+    cy.get("#fullName").type(fullName);
+    cy.get("#email").type(email);
+    cy.get("#password").type(password);
     cy.get("#registerButton").click();
     cy.url().should("equal", "http://localhost:3000/home");
   });
