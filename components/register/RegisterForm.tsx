@@ -58,7 +58,9 @@ const RegisterForm = () => {
           aria-label="fullName"
         />
         {validations.fullName && (
-          <p className="text-red-400 text-xs mt-2">{validations.fullName}</p>
+          <p id="fullNameValidation" className="text-red-400 text-xs mt-2">
+            {validations.fullName}
+          </p>
         )}
         <Spacer y={1} />
         <Input
@@ -71,7 +73,9 @@ const RegisterForm = () => {
           aria-label="email"
         />
         {validations.email && (
-          <p className="text-red-400 text-xs mt-2">{validations.email}</p>
+          <p id="emailValidation" className="text-red-400 text-xs mt-2">
+            {validations.email}
+          </p>
         )}
         <Spacer y={1} />
         <Input.Password
@@ -83,10 +87,12 @@ const RegisterForm = () => {
           aria-label="password"
         />
         {validations.password && (
-          <p className="text-red-400 text-xs mt-2">{validations.password}</p>
+          <p id="passwordValidation" className="text-red-400 text-xs mt-2">
+            {validations.password}
+          </p>
         )}
         <Spacer y={1} />
-        <Button size={"lg"} onPress={() => submit()}>
+        <Button id="registerButton" size={"lg"} onPress={() => submit()}>
           Register
         </Button>
         <Spacer y={1} />
@@ -129,6 +135,7 @@ const RegisterForm = () => {
         </Text>
         <Spacer y={1} />
         <Text
+          id="loginButton"
           onClick={() => router.push("/login")}
           color="primary"
           css={{
