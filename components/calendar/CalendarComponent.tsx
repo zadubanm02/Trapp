@@ -76,9 +76,9 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
   };
 
   function colorDay(day: Date): string {
-    const current = data?.find(
-      (calendarDay) => calendarDay.day.getDate() === day.getDate()
-    );
+    const current = data?.find((calendarDay) => {
+      return calendarDay.day.toDateString() === day.toDateString();
+    });
     // green background
     if (current) {
       if (current.value > 0) {
@@ -108,6 +108,17 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
     refresh({ firstDay, lastDay, userId });
     // const button = document.getElementById("calendarButton");
   }, [firstDay, currentMonth]);
+
+  useEffect(() => {
+    renderDays(
+      currentDays,
+      selectedDay,
+      firstDay,
+      setSelectedDay,
+      handler,
+      colorDay
+    );
+  }, [currentDays, data, firstDay, currentMonth]);
 
   const changeValue = useCallback(
     (e: React.ChangeEvent<FormElement>) => {
