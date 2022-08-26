@@ -81,7 +81,7 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (user) {
-      console.log("USER", user, router);
+      console.log("USER", user);
       router.push("/home");
     }
   }, [user]);
