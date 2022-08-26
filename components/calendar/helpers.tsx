@@ -79,10 +79,10 @@ export const renderDays = (
   setSelectedDay: (day: Date) => void,
   handler: () => void,
   colorDay: (day: Date) => string,
-  setFirebaseDay?: (
-    day: Date,
-    firebaseDays: FirebaseCalendar[]
-  ) => FirebaseCalendar
+  firebaseData: FirebaseCalendar[],
+  setFirebaseDay: React.Dispatch<
+    React.SetStateAction<FirebaseCalendar | undefined>
+  >
 ) => {
   return days.map((day, dayIdx) => (
     <div
@@ -97,7 +97,7 @@ export const renderDays = (
         type="button"
         onClick={() => {
           setSelectedDay(day);
-          //fillData(day)
+          setFirebaseDay(fillData(day, firebaseData));
           handler();
         }}
         className={classNames(

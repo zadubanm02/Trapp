@@ -154,7 +154,9 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
             firstDay,
             setSelectedDay,
             handler,
-            colorDay
+            colorDay,
+            data ?? [],
+            setFirebaseDay
           )}
         </div>
       </div>
@@ -167,6 +169,7 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
         decreaseValue={() => setValue((prev) => prev - 1)}
         saveData={save}
         value={value}
+        data={firebaseDay}
       />
     </>
   );
