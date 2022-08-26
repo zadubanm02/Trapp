@@ -20,7 +20,7 @@ import Image from "next/image";
 import PointModal from "../general/PointModal";
 import { useCalendar } from "../../hooks/useCalendar";
 import { FirebaseCalendar } from "../../types";
-import { colorDay } from "./helpers";
+//import { colorDay } from "./helpers";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -30,13 +30,63 @@ interface CalendarProps {
   userId: string;
 }
 
+const renderDays = (
+  days: Date[],
+  selectedDay: Date,
+  firstDay: Date,
+  setSelectedDay: (day: Date) => void,
+  handler: () => void,
+  colorDay: (day: Date) => string
+) => {
+  return days.map((day, dayIdx) => (
+    <div
+      key={day.toString()}
+      className={classNames(
+        dayIdx === 0 && colStartClasses[getDay(day)],
+        "p-1"
+      )}
+    >
+      <button
+        id={"calendarButton"}
+        type="button"
+        onClick={() => {
+          setSelectedDay(day);
+          handler();
+        }}
+        className={classNames(
+          colorDay(day),
+          isEqual(day, selectedDay) && "text-white",
+          !isEqual(day, selectedDay) && isToday(day) && "text-red-500",
+          !isEqual(day, selectedDay) &&
+            !isToday(day) &&
+            isSameMonth(day, firstDay) &&
+            "text-gray-900",
+          !isEqual(day, selectedDay) &&
+            !isToday(day) &&
+            !isSameMonth(day, firstDay) &&
+            "text-gray-400",
+          isEqual(day, selectedDay) && isToday(day) && "bg-red-500",
+          isEqual(day, selectedDay) && !isToday(day) && "bg-gray-900",
+          !isEqual(day, selectedDay) && "hover:bg-gray-200",
+          (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
+          "flex h-10 w-full mr-0 text-center items-center justify-center rounded-lg"
+        )}
+      >
+        <time className="text-center" dateTime={format(day, "yyyy-MM-dd")}>
+          {format(day, "d")}
+        </time>
+      </button>
+    </div>
+  ));
+};
+
 export const CalendarComponent = ({ userId }: CalendarProps) => {
   // today
   const today = startOfToday();
   // selected day
-  let [selectedDay, setSelectedDay] = useState(today);
+  const [selectedDay, setSelectedDay] = useState(today);
   // current month
-  let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
+  const [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   // first day of the month
   const [firstDay, setFirstDay] = useState<Date>(
     parse(currentMonth, "MMM-yyyy", new Date())
@@ -72,43 +122,47 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
   const previousMonth = () => {
     setFirstDay(add(firstDay, { months: -1 }));
     setCurrentMonth(format(firstDay, "MMM-yyyy"));
-    setCurrentDays(
-      eachDayOfInterval({
-        start: firstDay,
-        end: endOfMonth(firstDay),
-      })
-    );
-    console.log("current Days", currentDays);
   };
 
   const nextMonth = () => {
-    // setFirstDay(add(firstDay, { months: 1 }));
-    // setCurrentMonth(format(firstDay, "MMM-yyyy"));
-    // setCurrentDays(
-    //   eachDayOfInterval({
-    //     start: firstDay,
-    //     end: endOfMonth(firstDay),
-    //   })
-    // );
-    // console.log("current Days", currentDays);
+    setFirstDay(add(firstDay, { months: 1 }));
+    setCurrentMonth(format(firstDay, "MMM-yyyy"));
   };
 
-  // const adjustColor = () => {
-  //   return
-  // }
+  function colorDay(day: Date): string {
+    const current = data?.find(
+      (calendarDay) => calendarDay.day.getDate() === day.getDate()
+    );
+    // green background
+    if (current) {
+      if (current.value > 0) {
+        return "bg-green-300";
+      }
+      // red background
+      if (current.value < 0) {
+        return "bg-red-300";
+      }
+
+      // blue background
+      if (current.value == 0) {
+        return "bg-blue-300";
+      }
+    }
+    return "bg-white";
+  }
 
   // set new values if previous or next month is called
   useEffect(() => {
-    setFirstDay(add(firstDay, { months: 1 }));
-    setCurrentMonth(format(firstDay, "MMM-yyyy"));
     setCurrentDays(
       eachDayOfInterval({
         start: firstDay,
         end: endOfMonth(firstDay),
       })
     );
-    console.log("current Days", currentDays);
-  }, [nextMonth]);
+    refresh({ firstDay, lastDay, userId });
+    // const button = document.getElementById("calendarButton");
+    colorDay();
+  }, [firstDay, currentMonth]);
 
   const changeValue = useCallback(
     (e: React.ChangeEvent<FormElement>) => {
@@ -161,13 +215,14 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
               )}
             >
               <button
+                id={"calendarButton"}
                 type="button"
                 onClick={() => {
                   setSelectedDay(day);
                   handler();
                 }}
                 className={classNames(
-                  colorDay(day, data ?? []),
+                  colorDay(day),
                   isEqual(day, selectedDay) && "text-white",
                   !isEqual(day, selectedDay) && isToday(day) && "text-red-500",
                   !isEqual(day, selectedDay) &&
