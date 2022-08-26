@@ -5,22 +5,15 @@ import {
   eachDayOfInterval,
   endOfMonth,
   format,
-  getDay,
-  isEqual,
-  isSameDay,
-  isSameMonth,
-  isToday,
   parse,
-  parseISO,
   startOfToday,
 } from "date-fns";
 import { useState } from "react";
-import { Modal, Text, Input, Button, FormElement } from "@nextui-org/react";
+import { FormElement } from "@nextui-org/react";
 import Image from "next/image";
 import PointModal from "../general/PointModal";
 import { useCalendar } from "../../hooks/useCalendar";
-import { FirebaseCalendar } from "../../types";
-import { colorDay, renderDays } from "./helpers";
+import { renderDays } from "./helpers";
 
 interface CalendarProps {
   userId: string;
@@ -106,7 +99,6 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
       })
     );
     refresh({ firstDay, lastDay, userId });
-    // const button = document.getElementById("calendarButton");
   }, [firstDay, currentMonth]);
 
   useEffect(() => {
@@ -187,22 +179,3 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
 };
 
 export default CalendarComponent;
-
-const colors = {
-  red: "bg-rose-200",
-  blue: "bg-blue-200",
-  green: "bg-emerald-200",
-  yellow: "bg-yellow-200",
-};
-
-let colStartClasses = [
-  "",
-  "col-start-2",
-  "col-start-3",
-  "col-start-4",
-  "col-start-5",
-  "col-start-6",
-  "col-start-7",
-];
-
-const fillColor = () => {};
