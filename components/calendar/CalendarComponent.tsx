@@ -20,65 +20,11 @@ import Image from "next/image";
 import PointModal from "../general/PointModal";
 import { useCalendar } from "../../hooks/useCalendar";
 import { FirebaseCalendar } from "../../types";
-//import { colorDay } from "./helpers";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { colorDay, renderDays } from "./helpers";
 
 interface CalendarProps {
   userId: string;
 }
-
-const renderDays = (
-  days: Date[],
-  selectedDay: Date,
-  firstDay: Date,
-  setSelectedDay: (day: Date) => void,
-  handler: () => void,
-  colorDay: (day: Date) => string
-) => {
-  return days.map((day, dayIdx) => (
-    <div
-      key={day.toString()}
-      className={classNames(
-        dayIdx === 0 && colStartClasses[getDay(day)],
-        "p-1"
-      )}
-    >
-      <button
-        id={"calendarButton"}
-        type="button"
-        onClick={() => {
-          setSelectedDay(day);
-          handler();
-        }}
-        className={classNames(
-          colorDay(day),
-          isEqual(day, selectedDay) && "text-white",
-          !isEqual(day, selectedDay) && isToday(day) && "text-red-500",
-          !isEqual(day, selectedDay) &&
-            !isToday(day) &&
-            isSameMonth(day, firstDay) &&
-            "text-gray-900",
-          !isEqual(day, selectedDay) &&
-            !isToday(day) &&
-            !isSameMonth(day, firstDay) &&
-            "text-gray-400",
-          isEqual(day, selectedDay) && isToday(day) && "bg-red-500",
-          isEqual(day, selectedDay) && !isToday(day) && "bg-gray-900",
-          !isEqual(day, selectedDay) && "hover:bg-gray-200",
-          (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
-          "flex h-10 w-full mr-0 text-center items-center justify-center rounded-lg"
-        )}
-      >
-        <time className="text-center" dateTime={format(day, "yyyy-MM-dd")}>
-          {format(day, "d")}
-        </time>
-      </button>
-    </div>
-  ));
-};
 
 export const CalendarComponent = ({ userId }: CalendarProps) => {
   // today
@@ -161,7 +107,6 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
     );
     refresh({ firstDay, lastDay, userId });
     // const button = document.getElementById("calendarButton");
-    colorDay();
   }, [firstDay, currentMonth]);
 
   const changeValue = useCallback(
@@ -206,56 +151,14 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
           <div>S</div>
         </div>
         <div className="grid grid-cols-7 items-center text-center m-1 text-sm">
-          {currentDays.map((day, dayIdx) => (
-            <div
-              key={day.toString()}
-              className={classNames(
-                dayIdx === 0 && colStartClasses[getDay(day)],
-                "p-1"
-              )}
-            >
-              <button
-                id={"calendarButton"}
-                type="button"
-                onClick={() => {
-                  setSelectedDay(day);
-                  handler();
-                }}
-                className={classNames(
-                  colorDay(day),
-                  isEqual(day, selectedDay) && "text-white",
-                  !isEqual(day, selectedDay) && isToday(day) && "text-red-500",
-                  !isEqual(day, selectedDay) &&
-                    !isToday(day) &&
-                    isSameMonth(day, firstDay) &&
-                    "text-gray-900",
-                  !isEqual(day, selectedDay) &&
-                    !isToday(day) &&
-                    !isSameMonth(day, firstDay) &&
-                    "text-gray-400",
-                  isEqual(day, selectedDay) && isToday(day) && "bg-red-500",
-                  isEqual(day, selectedDay) && !isToday(day) && "bg-gray-900",
-                  !isEqual(day, selectedDay) && "hover:bg-gray-200",
-                  (isEqual(day, selectedDay) || isToday(day)) &&
-                    "font-semibold",
-                  "flex h-10 w-full mr-0 text-center items-center justify-center rounded-lg"
-                )}
-              >
-                <time
-                  className="text-center"
-                  dateTime={format(day, "yyyy-MM-dd")}
-                >
-                  {format(day, "d")}
-                </time>
-              </button>
-
-              {/* <div className="w-1 h-1 mx-auto mt-1">
-              {meetings.some((meeting) =>
-                isSameDay(parseISO(meeting.startDatetime), day)
-              ) && <div className="w-1 h-1 rounded-full bg-sky-500"></div>}
-            </div> */}
-            </div>
-          ))}
+          {renderDays(
+            currentDays,
+            selectedDay,
+            firstDay,
+            setSelectedDay,
+            handler,
+            colorDay
+          )}
         </div>
       </div>
 
