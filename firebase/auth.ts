@@ -10,7 +10,13 @@ import {
   FacebookAuthProvider,
 } from "firebase/auth";
 
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
 import { app } from ".";
 
 const auth = getAuth(app);
@@ -81,7 +87,8 @@ const registerWithEmail = async ({
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     const user = result.user;
-    await addDoc(collection(db, "users"), {
+    // custom doc id for better querying
+    await setDoc(doc(db, `users`, user.uid), {
       uid: user.uid,
       displayName: fullName,
       authProvider: "local",

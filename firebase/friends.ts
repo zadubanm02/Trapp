@@ -6,17 +6,12 @@ import {
   where,
   addDoc,
   Timestamp,
-  getDoc,
 } from "firebase/firestore";
 import { app } from ".";
 import { Calendar, ValueDay } from "../types";
 
-// John Test userId
-const userId = "Hm0VkQCeq4hArDGCM88X42YZ3Ai2";
-
 const db = getFirestore(app);
-const dbRef = collection(db, "calendar");
-const collectionRef = collection(db, `users/${userId}/days`);
+const dbRef = collection(db, "friends");
 
 // const toDateTime = (secs: number) => {
 //   var t = new Date(1970, 0, 1); // Epoch
@@ -24,15 +19,14 @@ const collectionRef = collection(db, `users/${userId}/days`);
 //   return t;
 // };
 
-// TODO UPDATE TO NESTED COLLECTION FOR EACH USER
 const getCalendarData = async ({ firstDay, lastDay, userId }: Calendar) => {
   const data: any = [];
-  const rangeConditions = [
-    where("day", ">=", Timestamp.fromDate(firstDay)),
-    where("day", "<=", Timestamp.fromDate(lastDay)),
+  const conditions = [
+    where("userId", "==", userId),
+    //where("day", ">=", firstDay),
+    //where("day", "<=", lastDay),
   ];
-  console.log("First Day", firstDay, "Last day", lastDay);
-  const currentMonthQuery = query(collectionRef, ...rangeConditions);
+  const currentMonthQuery = query(dbRef, ...conditions);
   try {
     const result = await getDocs(currentMonthQuery);
     result.docs.forEach((doc) => {
@@ -51,7 +45,8 @@ const getCalendarData = async ({ firstDay, lastDay, userId }: Calendar) => {
 };
 
 const valueDay = async ({ day, value, userId }: ValueDay) => {
-  await addDoc(collectionRef, {
+  await addDoc(dbRef, {
+    userId,
     value,
     day,
   });

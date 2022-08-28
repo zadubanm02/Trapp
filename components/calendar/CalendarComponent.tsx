@@ -66,11 +66,13 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
   const previousMonth = () => {
     setFirstDay(add(firstDay, { months: -1 }));
     setCurrentMonth(format(firstDay, "MMM-yyyy"));
+    setLastDay(endOfMonth(add(firstDay, { months: -1 })));
   };
 
   const nextMonth = () => {
     setFirstDay(add(firstDay, { months: 1 }));
     setCurrentMonth(format(firstDay, "MMM-yyyy"));
+    setLastDay(endOfMonth(add(firstDay, { months: 1 })));
   };
 
   function colorDay(day: Date): string {
