@@ -15,3 +15,9 @@ export interface ValueDay {
   day: Date;
   userId: string;
 }
+
+export interface Friend {
+  userId: string;
+  displayName: string;
+  value: number;
+}

@@ -65,15 +65,25 @@ export const mergeDays = (
   return mergedDays;
 };
 
+export const fillData = (day: Date, firebaseDays: FirebaseCalendar[]) => {
+  const data = firebaseDays.find(
+    (fir) => fir.day.toISOString() === day.toISOString()
+  );
+  return data;
+};
+
 export const renderDays = (
   days: Date[],
   selectedDay: Date,
   firstDay: Date,
   setSelectedDay: (day: Date) => void,
   handler: () => void,
-  colorDay: (day: Date) => string
+  colorDay: (day: Date) => string,
+  firebaseData: FirebaseCalendar[],
+  setFirebaseDay: React.Dispatch<
+    React.SetStateAction<FirebaseCalendar | undefined>
+  >
 ) => {
-  console.log("FirstDay", firstDay);
   return days.map((day, dayIdx) => (
     <div
       key={day.toString()}
@@ -87,6 +97,7 @@ export const renderDays = (
         type="button"
         onClick={() => {
           setSelectedDay(day);
+          setFirebaseDay(fillData(day, firebaseData));
           handler();
         }}
         className={classNames(

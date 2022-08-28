@@ -14,6 +14,7 @@ import Image from "next/image";
 import PointModal from "../general/PointModal";
 import { useCalendar } from "../../hooks/useCalendar";
 import { renderDays } from "./helpers";
+import { FirebaseCalendar } from "../../types";
 
 interface CalendarProps {
   userId: string;
@@ -48,6 +49,10 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
   });
   const [visible, setVisible] = React.useState(false);
   const [value, setValue] = useState<number>(0);
+
+  const [firebaseDay, setFirebaseDay] = useState<
+    FirebaseCalendar | undefined
+  >();
   const handler = () => setVisible(true);
 
   const save = () => {
@@ -61,11 +66,13 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
   const previousMonth = () => {
     setFirstDay(add(firstDay, { months: -1 }));
     setCurrentMonth(format(firstDay, "MMM-yyyy"));
+    setLastDay(endOfMonth(add(firstDay, { months: -1 })));
   };
 
   const nextMonth = () => {
     setFirstDay(add(firstDay, { months: 1 }));
     setCurrentMonth(format(firstDay, "MMM-yyyy"));
+    setLastDay(endOfMonth(add(firstDay, { months: 1 })));
   };
 
   function colorDay(day: Date): string {
@@ -100,17 +107,6 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
     );
     refresh({ firstDay, lastDay, userId });
   }, [firstDay, currentMonth]);
-
-  useEffect(() => {
-    renderDays(
-      currentDays,
-      selectedDay,
-      firstDay,
-      setSelectedDay,
-      handler,
-      colorDay
-    );
-  }, [currentDays, data, firstDay, currentMonth]);
 
   const changeValue = useCallback(
     (e: React.ChangeEvent<FormElement>) => {
@@ -160,7 +156,9 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
             firstDay,
             setSelectedDay,
             handler,
-            colorDay
+            colorDay,
+            data ?? [],
+            setFirebaseDay
           )}
         </div>
       </div>
@@ -173,6 +171,7 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
         decreaseValue={() => setValue((prev) => prev - 1)}
         saveData={save}
         value={value}
+        data={firebaseDay}
       />
     </>
   );
