@@ -1,18 +1,5 @@
 import React, { Suspense, useCallback, useState } from "react";
 import Navbar from "../../components/general/Navbar";
-import Banner from "../../components/dashboard/Banner";
-import Friends from "../../components/dashboard/Friends";
-import {
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ReferenceArea,
-  ReferenceDot,
-  ResponsiveContainer,
-} from "recharts";
 import CalendarComponent from "../../components/calendar/CalendarComponent";
 import RowFriend from "../../components/new/RowFriend";
 import AddFriendModal from "../../components/general/AddFriendModal";
@@ -20,42 +7,25 @@ import { FormElement } from "@nextui-org/react";
 import Chart from "../../components/new/Chart";
 import { useAtomValue } from "jotai";
 import { weekStateAtom } from "../../state/weekStat";
-
-const data = [
-  {
-    name: "Mon",
-    value: -1,
-  },
-  {
-    name: "Tue",
-    value: 7,
-  },
-  {
-    name: "Wen",
-    value: 5,
-  },
-  {
-    name: "Thu",
-    value: -4,
-  },
-  {
-    name: "Fri",
-    value: 9,
-  },
-  {
-    name: "Sat",
-    value: 0,
-  },
-  {
-    name: "Sun",
-    value: 3,
-  },
-];
+import { addOrSendEmail } from "../../utils/addOrSendEmail";
+import { EmailData } from "../../apiCalls/sendEmail";
+import { useAuth } from "../../hooks/useAuth";
+import SundayInfoBanner from "../../components/new/SundayInfoBanner";
+import { helpersStateAtom } from "../../state/helpersState";
+import FriendModal from "../../components/general/FriendModal";
+import { fakeFriends } from "../../utils/fakeData";
+import { Friend } from "../../types";
+import FriendList from "../../components/new/FriendList";
 
 const Home = () => {
   const [friendEmail, setFriendEmail] = React.useState<string>("");
   const [visible, setVisible] = React.useState(false);
+  const [friendModalVisible, setFriendModalVisible] =
+    React.useState<boolean>(false);
+  const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
+  const { user } = useAuth();
   const weekState = useAtomValue(weekStateAtom);
+  const sundayInfo = useAtomValue(helpersStateAtom);
   const handler = () => setVisible(true);
   const save = () => {
     return console.log("Add friend");
@@ -63,6 +33,21 @@ const Home = () => {
   const closeHandler = () => {
     setVisible(false);
     setFriendEmail("");
+  };
+  const closeFriendModalHandler = () => {
+    setFriendModalVisible(false);
+  };
+  const handleSendRequest = async () => {
+    const name = user?.displayName as string;
+    const data: EmailData = {
+      to: friendEmail,
+      name: name ?? "Trapp",
+      message: `${
+        name ?? "Trapp"
+      } is invited to use Trapp ! Join in to share your grades !`,
+    };
+    addOrSendEmail(data);
+    setVisible(false);
   };
   const changeValue = useCallback(
     (e: React.ChangeEvent<FormElement>) => {
@@ -73,6 +58,7 @@ const Home = () => {
   return (
     <div>
       <Navbar />
+      {sundayInfo && <SundayInfoBanner />}
       <div className="grid grid-cols-6 gap-8">
         <div></div>
         {/* Main Column for content */}
@@ -90,28 +76,6 @@ const Home = () => {
             <h2 className="font-bold text-gray-700 text-xl mb-2">
               Tvoj posledny tyzden
             </h2>
-            {/* <ResponsiveContainer width="100%" height="80%">
-              <LineChart
-                margin={{ left: 20, right: 20 }}
-                // width={500}
-                // height={200}
-                data={data}
-              >
-                <Line
-                  strokeWidth={2}
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#2564eb"
-                />
-                <XAxis
-                  interval={0}
-                  tickLine={false}
-                  axisLine={false}
-                  dataKey="name"
-                />
-                <Tooltip />
-              </LineChart>
-            </ResponsiveContainer> */}
             <Chart data={weekState ?? []} />
           </div>
           <div>
@@ -119,42 +83,11 @@ const Home = () => {
           </div>
         </div>
         <div className="col-span-2">
-          <div className="my-5  w-80 items-center">
-            <h2 className="font-bold text-gray-700 text-2xl mb-4">
-              Co tvoji kamosi ?
-            </h2>
-
-            <RowFriend name="Misko Conka" email="misko@azet.sk" value={-3} />
-            <RowFriend name="Ferko Mrkva" email="ferko@azet.sk" value={0} />
-            <RowFriend
-              name="Janko Curacik"
-              email="curacik.janicko@azet.sk"
-              value={7}
-            />
-            <RowFriend
-              name="Frantisek Ruzicka"
-              email="ferko@azet.sk"
-              value={0}
-            />
-            <RowFriend name="Denis Penis" email="penis@pornhub.com" value={9} />
-            <button
-              onClick={() => setVisible(true)}
-              className="splace-self-center m-5 mx-auto bg-blue-500 rounded-lg p-3 text-white"
-            >
-              Pridat priatela
-            </button>
-          </div>
+          <FriendList />
         </div>
         {/* Main Column for content */}
         <div></div>
       </div>
-      <AddFriendModal
-        changeFriendEmail={changeValue}
-        friendEmail={friendEmail}
-        visible={visible}
-        closeHandler={closeHandler}
-        saveData={save}
-      />
     </div>
   );
 };

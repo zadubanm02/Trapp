@@ -1,9 +1,19 @@
 import React from "react";
 
+export interface InternalFriend {
+  name: string;
+  email: string;
+  value: number;
+}
+
 interface RowProps {
   name: string;
   email: string;
   value: number;
+  // clickHandler?: React.Dispatch<
+  //   React.SetStateAction<InternalFriend | undefined>
+  // >;
+  clickHandler?: () => void;
 }
 
 const getColor = (value: number) => {
@@ -12,9 +22,12 @@ const getColor = (value: number) => {
   return `border-rose-500`;
 };
 
-const RowFriend = ({ name, email, value }: RowProps) => {
+const RowFriend = ({ name, email, value, clickHandler }: RowProps) => {
   return (
-    <div className="flex flex-row justify-between items-center my-2">
+    <div
+      onClick={clickHandler}
+      className="flex flex-row justify-between items-center my-2 cursor-pointer hover:bg-gray-100 rounded-lg"
+    >
       <div className="flex flex-row">
         <span
           className={`border-l-8 border-solid ${getColor(

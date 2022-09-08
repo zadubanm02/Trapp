@@ -20,4 +20,5 @@ export interface Friend {
   userId: string;
   displayName: string;
   value: number;
+  email: string;
 }

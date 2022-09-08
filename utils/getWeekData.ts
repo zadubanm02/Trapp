@@ -19,7 +19,7 @@ export const getWeekData = (data: FirebaseCalendar[]): WeekState[] => {
   });
   days.forEach((day) => {
     const item = data.find((dato) => {
-      return dato.day.getDay() == day.getDay();
+      return dato.day.getDate() == day.getDate();
     });
     finalData.push({ day: format(day, "EEE"), value: item ? item.value : 0 });
   });

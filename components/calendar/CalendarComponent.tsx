@@ -59,7 +59,8 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
   const handler = () => setVisible(true);
 
   const save = () => {
-    return rateDate({ day: selectedDay, userId, value });
+    rateDate({ day: selectedDay, userId, value });
+    setVisible(false);
   };
 
   const closeHandler = () => {

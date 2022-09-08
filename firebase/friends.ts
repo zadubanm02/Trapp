@@ -7,6 +7,7 @@ import {
   addDoc,
   Timestamp,
   limit,
+  getDoc,
 } from "firebase/firestore";
 import { app } from ".";
 import { Calendar, ValueDay } from "../types";
@@ -46,16 +47,31 @@ const getFriendsData = async (userId: string) => {
     console.log("Found", doc);
     friends.push({
       displayName: docData.displayName,
-      value: docData.value,
+      value: docData.value ?? 0,
+      email: docData.email,
     });
   });
   return friends;
 };
 
+const getUserByEmail = async (email: string) => {
+  let user: any = null;
+  const dataQuery = query(usersRef, where("email", "==", email));
+  const result = await getDocs(dataQuery);
+  if (result.docs.length === 0) {
+    return null;
+  }
+  result.docs.forEach((doc) => {
+    const docData = doc.data();
+    user = docData;
+  });
+  return user;
+};
+
 const addFriend = async (friendId: string) => {
-  await addDoc(collectionRef, {
+  const result = await addDoc(collectionRef, {
     friendId,
   });
 };
 
-export { getFriendsData, addFriend };
+export { getFriendsData, addFriend, getUserByEmail };

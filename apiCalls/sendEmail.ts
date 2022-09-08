@@ -1,4 +1,4 @@
-interface EmailData {
+export interface EmailData {
   to: string;
   message: string;
   name: string;

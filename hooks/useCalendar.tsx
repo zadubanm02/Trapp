@@ -30,7 +30,6 @@ export const useCalendar = ({ firstDay, lastDay, userId }: Calendar) => {
     getCalendarData({ firstDay, lastDay, userId })
       .then((result) => {
         console.log("DATAA", result);
-        setWeekState(getWeekData(result));
         return setData(result);
       })
       .catch((err) => setError(err));
@@ -54,7 +53,6 @@ export const useCalendar = ({ firstDay, lastDay, userId }: Calendar) => {
     getCalendarData({ firstDay, lastDay, userId })
       .then((result) => {
         console.log("Refreshed", result);
-        setWeekState(getWeekData(result));
         return setData(result);
       })
       .catch((err) => setError(err));
