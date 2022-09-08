@@ -15,7 +15,6 @@ import { Calendar, ValueDay } from "../types";
 const userId = "Hm0VkQCeq4hArDGCM88X42YZ3Ai2";
 
 const db = getFirestore(app);
-const dbRef = collection(db, "calendar");
 const collectionRef = collection(db, `users/${userId}/days`);
 
 // const toDateTime = (secs: number) => {

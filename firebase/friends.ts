@@ -6,50 +6,56 @@ import {
   where,
   addDoc,
   Timestamp,
+  limit,
 } from "firebase/firestore";
 import { app } from ".";
 import { Calendar, ValueDay } from "../types";
 
+// John Test userId
+const userId = "Hm0VkQCeq4hArDGCM88X42YZ3Ai2";
+
 const db = getFirestore(app);
-const dbRef = collection(db, "friends");
+const collectionRef = collection(db, `users/${userId}/friends`);
 
-// const toDateTime = (secs: number) => {
-//   var t = new Date(1970, 0, 1); // Epoch
-//   t.setSeconds(secs);
-//   return t;
-// };
+const usersRef = collection(db, "users");
 
-const getCalendarData = async ({ firstDay, lastDay, userId }: Calendar) => {
-  const data: any = [];
-  const conditions = [
-    where("userId", "==", userId),
-    //where("day", ">=", firstDay),
-    //where("day", "<=", lastDay),
-  ];
-  const currentMonthQuery = query(dbRef, ...conditions);
-  try {
-    const result = await getDocs(currentMonthQuery);
-    result.docs.forEach((doc) => {
-      data.push({
-        ...doc.data(),
-        day: new Timestamp(
-          doc.data().day.seconds,
-          doc.data().day.nanoseconds
-        ).toDate(),
-      });
+// Question: store only userids and get their value data by querryng users?
+const getFriendsData = async (userId: string) => {
+  // Get ids from user friends collection
+  const friendsIds: any = [];
+  // Get names and values from users collection
+  const friends: any = [];
+
+  // TODO make dynamic for dashboard and whole list
+  // Limit to 6 friends for dashboard
+  const conditions = [limit(6)];
+  const friendIdsQuery = query(collectionRef, ...conditions);
+  const result = await getDocs(friendIdsQuery);
+  result.docs.forEach((doc) => {
+    friendsIds.push(doc.data().friendId);
+  });
+
+  console.log("Friend Ids", friendsIds);
+  // Get actual friends data
+  const usersConditions = [where("uid", "in", friendsIds)];
+
+  const dataQuery = query(usersRef, ...usersConditions, limit(6));
+  const usersResult = await getDocs(dataQuery);
+  usersResult.docs.forEach((doc) => {
+    const docData = doc.data();
+    console.log("Found", doc);
+    friends.push({
+      displayName: docData.displayName,
+      value: docData.value,
     });
-    return data;
-  } catch (error) {
-    throw error;
-  }
+  });
+  return friends;
 };
 
-const valueDay = async ({ day, value, userId }: ValueDay) => {
-  await addDoc(dbRef, {
-    userId,
-    value,
-    day,
+const addFriend = async (friendId: string) => {
+  await addDoc(collectionRef, {
+    friendId,
   });
 };
 
-export { getCalendarData, valueDay };
+export { getFriendsData, addFriend };
