@@ -1,6 +1,9 @@
+import { useAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { getCalendarData, valueDay } from "../firebase/calendar";
+import { weekStateAtom } from "../state/weekStat";
 import { Calendar, FirebaseCalendar, ValueDay } from "../types";
+import { getWeekData } from "../utils/getWeekData";
 import { useAuth } from "./useAuth";
 
 export const useCalendar = ({ firstDay, lastDay, userId }: Calendar) => {
@@ -8,6 +11,8 @@ export const useCalendar = ({ firstDay, lastDay, userId }: Calendar) => {
   const [error, setError] = useState<unknown | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [dayData, setDayData] = useState({ firstDay, lastDay });
+  // global atom for weekly chart
+  const [weekState, setWeekState] = useAtom(weekStateAtom);
 
   const rateDate = useCallback(
     async (calendarData: ValueDay): Promise<void> => {
@@ -36,6 +41,7 @@ export const useCalendar = ({ firstDay, lastDay, userId }: Calendar) => {
     getCalendarData({ firstDay, lastDay, userId })
       .then((result) => {
         console.log("DATAA", result);
+        setWeekState(getWeekData(result));
         return setData(result);
       })
       .catch((err) => setError(err));

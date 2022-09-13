@@ -15,6 +15,8 @@ import PointModal from "../general/PointModal";
 import { useCalendar } from "../../hooks/useCalendar";
 import { renderDays } from "./helpers";
 import { FirebaseCalendar } from "../../types";
+import { useAtom } from "jotai";
+import { weekStateAtom } from "../../state/weekStat";
 
 interface CalendarProps {
   userId: string;
@@ -53,10 +55,12 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
   const [firebaseDay, setFirebaseDay] = useState<
     FirebaseCalendar | undefined
   >();
+
   const handler = () => setVisible(true);
 
   const save = () => {
-    return rateDate({ day: selectedDay, userId, value });
+    rateDate({ day: selectedDay, userId, value });
+    setVisible(false);
   };
 
   const closeHandler = () => {
@@ -118,7 +122,7 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
 
   return (
     <>
-      <div className="w-2/5 border-xl m-2 px-4 mx-auto bg-white sm:px-7 md:max-w-4xl md:px-6">
+      <div className=" border-xl bg-white md:max-w-4xl">
         <div className="flex items-center justify-between p-2">
           <button
             type="button"
