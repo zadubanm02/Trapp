@@ -1,8 +1,6 @@
-import React, { Suspense, useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Navbar from "../../components/general/Navbar";
 import CalendarComponent from "../../components/calendar/CalendarComponent";
-import RowFriend from "../../components/new/RowFriend";
-import AddFriendModal from "../../components/general/AddFriendModal";
 import { FormElement } from "@nextui-org/react";
 import Chart from "../../components/new/Chart";
 import { useAtomValue } from "jotai";
@@ -12,54 +10,21 @@ import { EmailData } from "../../apiCalls/sendEmail";
 import { useAuth } from "../../hooks/useAuth";
 import SundayInfoBanner from "../../components/new/SundayInfoBanner";
 import { helpersStateAtom } from "../../state/helpersState";
-import FriendModal from "../../components/general/FriendModal";
-import { fakeFriends } from "../../utils/fakeData";
 import { Friend } from "../../types";
 import FriendList from "../../components/new/FriendList";
+import useTheme from "next-theme";
 
 const Home = () => {
-  const [friendEmail, setFriendEmail] = React.useState<string>("");
-  const [visible, setVisible] = React.useState(false);
-  const [friendModalVisible, setFriendModalVisible] =
-    React.useState<boolean>(false);
-  const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
+  const { theme, setTheme } = useTheme();
   const { user } = useAuth();
   const weekState = useAtomValue(weekStateAtom);
   const sundayInfo = useAtomValue(helpersStateAtom);
-  const handler = () => setVisible(true);
-  const save = () => {
-    return console.log("Add friend");
-  };
-  const closeHandler = () => {
-    setVisible(false);
-    setFriendEmail("");
-  };
-  const closeFriendModalHandler = () => {
-    setFriendModalVisible(false);
-  };
-  const handleSendRequest = async () => {
-    const name = user?.displayName as string;
-    const data: EmailData = {
-      to: friendEmail,
-      name: name ?? "Trapp",
-      message: `${
-        name ?? "Trapp"
-      } is invited to use Trapp ! Join in to share your grades !`,
-    };
-    addOrSendEmail(data);
-    setVisible(false);
-  };
-  const changeValue = useCallback(
-    (e: React.ChangeEvent<FormElement>) => {
-      setFriendEmail(e.target.value);
-    },
-    [friendEmail]
-  );
+
   return (
-    <div>
+    <div className="h-screen dark:bg-slate-800">
       <Navbar />
       {sundayInfo && <SundayInfoBanner />}
-      <div className="grid grid-cols-6 gap-8">
+      <div className="grid grid-cols-6 gap-8 dark:bg-slate-800">
         <div></div>
         {/* Main Column for content */}
         <div className="col-span-2">
