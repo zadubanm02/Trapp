@@ -1,5 +1,6 @@
 import { useAtom } from "jotai";
 import React from "react";
+import { FormattedMessage } from "react-intl";
 import { helpersStateAtom } from "../../state/helpersState";
 
 const SundayInfoBanner = () => {
@@ -11,11 +12,10 @@ const SundayInfoBanner = () => {
       <div className="col-span-4 rounded-lg bg-red-300 p-3 flex flex-row justify-between items-center">
         <div>
           <h1 className="font-bold text-gray-700 text-lg">
-            Pozor pondelok na obzore!
+            <FormattedMessage id="page.home.head.danger.sunday.title" />
           </h1>
           <p className="text-md font-semibold text-gray-600">
-            Posledné, čo naozaj chceš je ísť do nového týždňa so záporným
-            číslom. Z toho sa potom ťažko vymotáva.
+            <FormattedMessage id="page.home.head.danger.sunday.text" />
           </p>
         </div>
         <button

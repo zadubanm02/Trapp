@@ -13,12 +13,20 @@ import { helpersStateAtom } from "../../state/helpersState";
 import { Friend } from "../../types";
 import FriendList from "../../components/new/FriendList";
 import useTheme from "next-theme";
+import { useRouter } from "next/router";
+import { FormattedMessage, useIntl } from "react-intl";
+import { evaluateMessage, getEmoji } from "../../utils/evaluateMessage";
 
 const Home = () => {
   const { theme, setTheme } = useTheme();
   const { user } = useAuth();
+  const { locales } = useRouter();
+
+  const intl = useIntl();
   const weekState = useAtomValue(weekStateAtom);
   const sundayInfo = useAtomValue(helpersStateAtom);
+
+  const value = 6;
 
   return (
     <div className="h-screen dark:bg-slate-800">
@@ -31,15 +39,19 @@ const Home = () => {
           <div className="my-5 flex flex-row justify-between w-80 items-center bg-blue-300 rounded-lg p-3">
             <div>
               <h2 className="font-bold text-gray-700 text-2xl mb-2">
-                Ako si na tom ?
+                <FormattedMessage id="page.home.head.title" />
               </h2>
-              <p className="text-gray-600">Nic moc brasko &#128528;</p>
+              <p className="text-gray-600">
+                <FormattedMessage id={evaluateMessage(value)} />
+                {getEmoji(value)}
+                {/* &#128528; */}
+              </p>
             </div>
-            <h3 className="text-4xl font-bold mr-2">3</h3>
+            <h3 className="text-4xl font-bold mr-2">{value}</h3>
           </div>
           <div className="w-full h-96 my-5 mt-8">
-            <h2 className="font-bold text-gray-700 text-xl mb-2">
-              Tvoj posledny tyzden
+            <h2 className="font-bold text-gray-700 text-xl mb-2 dark:text-slate-50">
+              <FormattedMessage id="page.home.week.title" />
             </h2>
             <Chart data={weekState ?? []} />
           </div>

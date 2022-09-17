@@ -13,8 +13,13 @@ import {
   parseISO,
   startOfToday,
 } from "date-fns";
+import useTheme from "next-theme";
 
-export function colorDay(day: Date, data: FirebaseCalendar[]): string {
+export function colorDay(
+  day: Date,
+  data: FirebaseCalendar[],
+  theme?: string
+): string {
   const current = data.find(
     (calendarDay) => calendarDay.day.getDate() === day.getDate()
   );
@@ -33,6 +38,7 @@ export function colorDay(day: Date, data: FirebaseCalendar[]): string {
       return "bg-blue-300";
     }
   }
+
   return "bg-white";
 }
 
@@ -78,12 +84,13 @@ export const renderDays = (
   firstDay: Date,
   setSelectedDay: (day: Date) => void,
   handler: () => void,
-  colorDay: (day: Date) => string,
+  colorDay: (day: Date, theme?: string) => string,
   firebaseData: FirebaseCalendar[],
   setFirebaseDay: React.Dispatch<
     React.SetStateAction<FirebaseCalendar | undefined>
   >
 ) => {
+  const { theme } = useTheme();
   return days.map((day, dayIdx) => (
     <div
       key={day.toString()}
@@ -101,7 +108,7 @@ export const renderDays = (
           handler();
         }}
         className={classNames(
-          colorDay(day),
+          colorDay(day, theme),
           isEqual(day, selectedDay) && "text-white",
           !isEqual(day, selectedDay) && isToday(day) && "text-red-500",
           !isEqual(day, selectedDay) &&
@@ -114,12 +121,16 @@ export const renderDays = (
             "text-gray-400",
           isEqual(day, selectedDay) && isToday(day) && "bg-red-500",
           isEqual(day, selectedDay) && !isToday(day) && "bg-gray-900",
-          !isEqual(day, selectedDay) && "hover:bg-gray-200",
+          !isEqual(day, selectedDay) &&
+            "hover:bg-gray-200 dark:hover:bg-slate-600",
           (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
           "flex h-10 w-full mr-0 text-center items-center justify-center rounded-lg"
         )}
       >
-        <time className="text-center" dateTime={format(day, "yyyy-MM-dd")}>
+        <time
+          className="text-center dark:text-slate-50"
+          dateTime={format(day, "yyyy-MM-dd")}
+        >
           {format(day, "d")}
         </time>
       </button>

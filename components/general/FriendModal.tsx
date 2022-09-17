@@ -2,6 +2,7 @@ import { Modal, Input, Button, Text } from "@nextui-org/react";
 import React from "react";
 import Image from "next/image";
 import { InternalFriend } from "../new/RowFriend";
+import { FormattedMessage } from "react-intl";
 
 interface ModalProps {
   visible: boolean;
@@ -24,9 +25,13 @@ const FriendModal = ({
       onClose={closeHandler}
       width="470px"
       blur
+      className=" dark:bg-slate-800"
     >
       <Modal.Header>
-        <Text id="modal-title" className="font-bold text-2xl">
+        <Text
+          id="modal-title"
+          className="font-bold text-2xl dark:text-slate-50"
+        >
           {friend?.name}
         </Text>
       </Modal.Header>
@@ -40,24 +45,28 @@ const FriendModal = ({
             className="rounded-full m-3"
           />
         </div>
-        <Text className="my-3">
-          {friend?.name} ma momentalne taketo skore &#9996;
+        <Text className="my-3 dark:text-slate-50 text-center">
+          <FormattedMessage
+            id="modal.friend.text"
+            values={{ name: friend?.name }}
+          />{" "}
+          &#9996;
         </Text>
-        <h2 className="text-center font-extrabold text-5xl text-gray-700">
+        <h2 className="text-center font-extrabold text-5xl text-gray-700 dark:text-slate-100">
           {friend?.value}
         </h2>
       </Modal.Body>
       <Modal.Footer justify="center">
         <div>
           <Button className="mx-auto mb-4" auto onClick={saveData}>
-            Informuj ma o moznosti ist von
+            <FormattedMessage id="modal.friend.button" />
           </Button>
           <Text
             color="primary"
-            className="mx-auto text-lg"
+            className=" text-lg text-center"
             onClick={closeHandler}
           >
-            Zavriet
+            <FormattedMessage id="modal.friend.close" />
           </Text>
         </div>
       </Modal.Footer>

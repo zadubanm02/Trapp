@@ -26,7 +26,7 @@ const RowFriend = ({ name, email, value, clickHandler }: RowProps) => {
   return (
     <div
       onClick={clickHandler}
-      className="flex flex-row justify-between items-center my-2 cursor-pointer hover:bg-gray-100 rounded-lg"
+      className="flex flex-row justify-between items-center my-2 cursor-pointer hover:bg-gray-100 rounded-lg dark:hover:bg-slate-700"
     >
       <div className="flex flex-row">
         <span
@@ -35,11 +35,13 @@ const RowFriend = ({ name, email, value, clickHandler }: RowProps) => {
           )} mr-3 rounded-lg`}
         ></span>
         <div>
-          <h2 className="text-gray-700 font-bold text-lg">{name}</h2>
-          <p className="text-gray-600 text-sm">{email}</p>
+          <h2 className="text-gray-700 font-bold text-lg dark:text-slate-50">
+            {name}
+          </h2>
+          <p className="text-gray-600 text-sm dark:text-slate-100">{email}</p>
         </div>
       </div>
-      <p className="font-bold text-2xl">{value}</p>
+      <p className="font-bold text-2xl dark:text-slate-50">{value}</p>
     </div>
   );
 };
