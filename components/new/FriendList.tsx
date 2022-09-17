@@ -1,5 +1,6 @@
 import { FormElement } from "@nextui-org/react";
 import React, { useCallback, useState } from "react";
+import { FormattedMessage } from "react-intl";
 import { EmailData } from "../../apiCalls/sendEmail";
 import { useAuth } from "../../hooks/useAuth";
 import { addOrSendEmail } from "../../utils/addOrSendEmail";
@@ -48,8 +49,8 @@ const FriendList = () => {
   return (
     <>
       <div className="my-5  w-80 items-center">
-        <h2 className="font-bold text-gray-700 text-2xl mb-4">
-          Co tvoji kamosi ?
+        <h2 className="font-bold text-gray-700 text-2xl mb-4 dark:text-slate-50">
+          <FormattedMessage id="page.home.friends.title" />
         </h2>
         {fakeFriends.map((friend) => {
           return (
@@ -69,7 +70,7 @@ const FriendList = () => {
           onClick={() => setVisible(true)}
           className="splace-self-center m-5 mx-auto bg-blue-500 rounded-lg p-3 text-white"
         >
-          Pridat priatela
+          <FormattedMessage id="friends.addFriend" />
         </button>
       </div>
       <AddFriendModal

@@ -9,7 +9,7 @@ import {
   startOfToday,
 } from "date-fns";
 import { useState } from "react";
-import { FormElement } from "@nextui-org/react";
+import { FormElement, useTheme } from "@nextui-org/react";
 import Image from "next/image";
 import PointModal from "../general/PointModal";
 import { useCalendar } from "../../hooks/useCalendar";
@@ -23,6 +23,7 @@ interface CalendarProps {
 }
 
 export const CalendarComponent = ({ userId }: CalendarProps) => {
+  const { theme } = useTheme();
   // today
   const today = startOfToday();
   // selected day
@@ -79,7 +80,7 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
     setLastDay(endOfMonth(add(firstDay, { months: 1 })));
   };
 
-  function colorDay(day: Date): string {
+  function colorDay(day: Date, theme?: string): string {
     const current = data?.find((calendarDay) => {
       return calendarDay.day.toDateString() === day.toDateString();
     });
@@ -97,6 +98,9 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
       if (current.value == 0) {
         return "bg-blue-300";
       }
+    }
+    if (theme == "dark") {
+      return "bg-slate-700";
     }
     return "bg-white";
   }
@@ -122,17 +126,17 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
 
   return (
     <>
-      <div className=" border-xl bg-white md:max-w-4xl">
+      <div className=" border-xl bg-white md:max-w-4xl dark:bg-slate-800">
         <div className="flex items-center justify-between p-2">
           <button
             type="button"
             onClick={previousMonth}
-            className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+            className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500 dark:text-slate-50"
           >
             <span className="sr-only">Previous month</span>
             <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
           </button>
-          <h2 className="font-semibold text-gray-900">
+          <h2 className="font-semibold text-gray-900 dark:text-slate-50">
             {format(firstDay, "MMMM yyyy")}
           </h2>
           <button
@@ -144,7 +148,7 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
             <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
-        <div className="grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500">
+        <div className="grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500 dark:text-slate-200">
           <div>S</div>
           <div>M</div>
           <div>T</div>

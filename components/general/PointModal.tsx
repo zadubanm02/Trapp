@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { FirebaseCalendar } from "../../types";
 import { format } from "date-fns";
+import { FormattedMessage } from "react-intl";
 
 interface ModalProps {
   visible: boolean;
@@ -34,11 +35,15 @@ const PointModal = ({
       onClose={closeHandler}
       width="470px"
       blur
+      className=" dark:bg-slate-800"
     >
       {data ? (
         <>
           <Modal.Header>
-            <Text id="modal-title" className="font-bold text-2xl">
+            <Text
+              id="modal-title"
+              className="font-bold text-2xl dark:text-slate-50"
+            >
               {format(data.day, "dd MMM yyyy")}
             </Text>
           </Modal.Header>
@@ -49,9 +54,11 @@ const PointModal = ({
               alt="Logo"
               className="rounded-xl m-3"
             />
-            <Text className="my-3 text-center">Si nazbieral taketo skore</Text>
-            <div className="px-6 py-3 rounded-full bg-sky-100 m-4 flex justify-center self-center items-center">
-              <p className="text-center text-2xl w-full text-sky-700 font-bold">
+            <Text className="my-3 text-center dark:text-slate-50">
+              <FormattedMessage id="modal.pointModal.title" />
+            </Text>
+            <div className="px-6 py-3 rounded-full bg-sky-100 dark:bg-slate-500 m-4 flex justify-center self-center items-center">
+              <p className="text-center text-2xl w-full text-sky-700 font-bold dark:text-slate-50">
                 {data.value}
               </p>
             </div>
@@ -59,14 +66,14 @@ const PointModal = ({
           <Modal.Footer justify="center">
             <div>
               <Button className="mx-auto mb-4" auto onClick={saveData}>
-                Potvrdit
+                <FormattedMessage id="modal.pointModal.button.confirm" />
               </Button>
               <Text
                 color="primary"
                 className="mx-auto text-lg"
                 onClick={closeHandler}
               >
-                Zavriet
+                <FormattedMessage id="modal.pointModal.button.close" />
               </Text>
             </div>
           </Modal.Footer>
@@ -74,8 +81,11 @@ const PointModal = ({
       ) : (
         <>
           <Modal.Header>
-            <Text id="modal-title" className="font-bold text-2xl">
-              Aky si dnes bol ?
+            <Text
+              id="modal-title"
+              className="font-bold text-2xl dark:text-slate-50"
+            >
+              <FormattedMessage id="modal.pointModal.how" />
             </Text>
           </Modal.Header>
           <Modal.Body className="m-5">
@@ -85,11 +95,8 @@ const PointModal = ({
               alt="Logo"
               className="rounded-xl m-3"
             />
-            <Text className="my-3">
-              Na základe tvojej pani dôležitých otázok si zodpovedaj na kolko
-              bodov si dnes bol dobrý partner do života. Bol si doma? Splnil si
-              základné povinnosti? Odpovedz si na základné otázky a oboduj -10
-              až 10.
+            <Text className="my-3 dark:text-slate-50">
+              <FormattedMessage id="modal.pointModal.text" />
             </Text>
             {/* <div className="flex flex-row justify-between items-center">
           <div></div>
@@ -129,19 +136,21 @@ const PointModal = ({
               value={value}
               onChange={changeValue}
             />
-            <p className="text-center text-2xl w-full mt-3">{value}</p>
+            <p className="text-center text-2xl w-full mt-3 dark:text-slate-50">
+              {value}
+            </p>
           </Modal.Body>
           <Modal.Footer justify="center">
             <div>
               <Button className="mx-auto mb-4" auto onClick={saveData}>
-                Potvrdit
+                <FormattedMessage id="modal.pointModal.button.confirm" />
               </Button>
               <Text
                 color="primary"
                 className="mx-auto text-lg"
                 onClick={closeHandler}
               >
-                Zavriet
+                <FormattedMessage id="modal.pointModal.button.close" />
               </Text>
             </div>
           </Modal.Footer>
