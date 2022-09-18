@@ -1,19 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Navbar from "../../components/general/Navbar";
 import CalendarComponent from "../../components/calendar/CalendarComponent";
-import { FormElement } from "@nextui-org/react";
 import Chart from "../../components/new/Chart";
 import { useAtomValue } from "jotai";
 import { weekStateAtom } from "../../state/weekStat";
-import { addOrSendEmail } from "../../utils/addOrSendEmail";
-import { EmailData } from "../../apiCalls/sendEmail";
 import { useAuth } from "../../hooks/useAuth";
 import SundayInfoBanner from "../../components/new/SundayInfoBanner";
 import { helpersStateAtom } from "../../state/helpersState";
-import { Friend } from "../../types";
 import FriendList from "../../components/new/FriendList";
 import useTheme from "next-theme";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { FormattedMessage, useIntl } from "react-intl";
 import { evaluateMessage, getEmoji } from "../../utils/evaluateMessage";
 
@@ -21,12 +17,19 @@ const Home = () => {
   const { theme, setTheme } = useTheme();
   const { user } = useAuth();
   const { locales } = useRouter();
+  const router = useRouter();
 
   const intl = useIntl();
   const weekState = useAtomValue(weekStateAtom);
   const sundayInfo = useAtomValue(helpersStateAtom);
 
   const value = 6;
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, []);
 
   return (
     <div className="h-screen dark:bg-slate-800">
