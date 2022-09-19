@@ -16,12 +16,13 @@ import { Calendar, ValueDay } from "../types";
 const userId = "Hm0VkQCeq4hArDGCM88X42YZ3Ai2";
 
 const db = getFirestore(app);
-const collectionRef = collection(db, `users/${userId}/friends`);
 
 const usersRef = collection(db, "users");
 
 // Question: store only userids and get their value data by querryng users?
 const getFriendsData = async (userId: string) => {
+  const collectionRef = collection(db, `users/${userId}/friends`);
+
   // Get ids from user friends collection
   const friendsIds: any = [];
   // Get names and values from users collection
@@ -69,6 +70,8 @@ const getUserByEmail = async (email: string) => {
 };
 
 const addFriend = async (friendId: string) => {
+  const collectionRef = collection(db, `users/${userId}/friends`);
+
   const result = await addDoc(collectionRef, {
     friendId,
   });

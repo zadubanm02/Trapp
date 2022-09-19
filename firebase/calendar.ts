@@ -15,7 +15,6 @@ import { Calendar, ValueDay } from "../types";
 const userId = "Hm0VkQCeq4hArDGCM88X42YZ3Ai2";
 
 const db = getFirestore(app);
-const collectionRef = collection(db, `users/${userId}/days`);
 
 // const toDateTime = (secs: number) => {
 //   var t = new Date(1970, 0, 1); // Epoch
@@ -25,6 +24,8 @@ const collectionRef = collection(db, `users/${userId}/days`);
 
 // TODO UPDATE TO NESTED COLLECTION FOR EACH USER
 const getCalendarData = async ({ firstDay, lastDay, userId }: Calendar) => {
+  const collectionRef = collection(db, `users/${userId}/days`);
+
   const data: any = [];
   const rangeConditions = [
     where("day", ">=", Timestamp.fromDate(firstDay)),
@@ -50,6 +51,8 @@ const getCalendarData = async ({ firstDay, lastDay, userId }: Calendar) => {
 };
 
 const valueDay = async ({ day, value, userId }: ValueDay) => {
+  const collectionRef = collection(db, `users/${userId}/days`);
+
   await addDoc(collectionRef, {
     value,
     day,
