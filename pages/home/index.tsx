@@ -23,8 +23,6 @@ const Home = () => {
   const weekState = useAtomValue(weekStateAtom);
   const sundayInfo = useAtomValue(helpersStateAtom);
 
-  const value = 6;
-
   useEffect(() => {
     if (!user) {
       router.push("/login");
@@ -59,7 +57,7 @@ const Home = () => {
             <Chart data={weekState ?? []} />
           </div>
           <div>
-            <CalendarComponent userId="qCCBiKp1fzNsacX1BA7rW8wVDnc2" />
+            <CalendarComponent userId={user?.uid as string} />
           </div>
         </div>
         <div className="col-span-2">

@@ -20,12 +20,17 @@ export default function handler(
     secure: true,
   });
 
+  // TODO change url
   const mailData = {
     from: "trapp@demo.com",
     to: req.body.to,
-    subject: `Welcome to Trapp ${req.body.name}`,
-    text: req.body.message,
-    //html: <div>{req.body.text}</div>,
+    subject: `Welcome to Trapp`,
+    //text: req.body.message,
+    html: `<div>
+    <h2>Whats uup!</h2> </br>
+    <h4>You have been invited to trapp !</h4> </br>
+    <h4>Create new account <a href="http://localhost:3000/login">Trapp </a> </h4>    
+    </div>`,
   };
   transporter.sendMail(mailData, function (err, info) {
     if (err) console.log(err);
