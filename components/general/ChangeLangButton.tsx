@@ -19,24 +19,33 @@ const ChangeLangButton = () => {
   return (
     <>
       {locale == "en" ? (
-        <button key={"sk"} onClick={() => onChangeLanguage()}>
+        <button
+          className="mx-2 flex justify-center items-center"
+          key={"sk"}
+          onClick={() => onChangeLanguage()}
+        >
           <Image
             src={require("../../assets/icons8-slovakia-48.png")}
-            height={24}
             width={24}
+            height={24}
             alt="Logo"
-            className="rounded-xl mt-6 relative"
-            style={{ top: 10 }}
+            className="rounded-xl relative"
           />
         </button>
       ) : (
-        <button key={"en"} onClick={() => onChangeLanguage()}>
+        // </button>
+        <button
+          p-2
+          className="mx-2 flex justify-center items-center"
+          key={"en"}
+          onClick={() => onChangeLanguage()}
+        >
           <Image
             src={require("../../assets/icons8-usa-48.png")}
-            height={24}
-            width={24}
             alt="Logo"
-            className="rounded-xl"
+            width={24}
+            height={24}
+            className="rounded-xl p-2"
           />
         </button>
       )}

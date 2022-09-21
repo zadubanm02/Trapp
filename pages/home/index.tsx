@@ -8,20 +8,19 @@ import { useAuth } from "../../hooks/useAuth";
 import SundayInfoBanner from "../../components/new/SundayInfoBanner";
 import { helpersStateAtom } from "../../state/helpersState";
 import FriendList from "../../components/new/FriendList";
-import useTheme from "next-theme";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { FormattedMessage, useIntl } from "react-intl";
 import { evaluateMessage, getEmoji } from "../../utils/evaluateMessage";
+import { finalStateAtom } from "../../state/finalState";
+import { NextPage } from "next";
 
-const Home = () => {
-  const { theme, setTheme } = useTheme();
+const Home: NextPage = () => {
   const { user } = useAuth();
-  const { locales } = useRouter();
   const router = useRouter();
 
-  const intl = useIntl();
   const weekState = useAtomValue(weekStateAtom);
   const sundayInfo = useAtomValue(helpersStateAtom);
+  const finalValue = useAtomValue(finalStateAtom);
 
   useEffect(() => {
     if (!user) {
@@ -43,12 +42,12 @@ const Home = () => {
                 <FormattedMessage id="page.home.head.title" />
               </h2>
               <p className="text-gray-600">
-                <FormattedMessage id={evaluateMessage(value)} />
-                {getEmoji(value)}
+                <FormattedMessage id={evaluateMessage(finalValue)} />
+                {getEmoji(finalValue)}
                 {/* &#128528; */}
               </p>
             </div>
-            <h3 className="text-4xl font-bold mr-2">{value}</h3>
+            <h3 className="text-4xl font-bold mr-2">{finalValue}</h3>
           </div>
           <div className="w-full h-96 my-5 mt-8">
             <h2 className="font-bold text-gray-700 text-xl mb-2 dark:text-slate-50">

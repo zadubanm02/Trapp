@@ -59,8 +59,9 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
 
   const handler = () => setVisible(true);
 
-  const save = () => {
-    rateDate({ day: selectedDay, userId, value });
+  const save = async () => {
+    await rateDate({ day: selectedDay, userId, value });
+    refresh({ firstDay, lastDay, userId });
     setVisible(false);
   };
 
