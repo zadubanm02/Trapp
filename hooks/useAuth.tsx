@@ -34,7 +34,6 @@ export const useAuth = () => {
   const registerWithGoogleProvider = useCallback(async (): Promise<void> => {
     try {
       const result = await registerWithGoogle();
-      console.log("RESULT", result);
       setUser(result);
     } catch (err) {
       setError(err);
@@ -44,7 +43,6 @@ export const useAuth = () => {
   const registerWithFacebookProvider = useCallback(async (): Promise<void> => {
     try {
       const result = await registerWithFacebook();
-      console.log("RESULT", result);
       setUser(result);
     } catch (err) {
       setError(err);
@@ -54,7 +52,6 @@ export const useAuth = () => {
   const loginWithGoogleProvider = useCallback(async (): Promise<void> => {
     try {
       const result = await loginWithGoogle();
-      console.log("RESULT", result);
       setUser(result);
     } catch (err) {
       setError(err);
@@ -81,7 +78,6 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (user) {
-      console.log("USER", user);
       router.push("/home");
     }
   }, [user]);

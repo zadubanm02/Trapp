@@ -31,7 +31,6 @@ const getCalendarData = async ({ firstDay, lastDay, userId }: Calendar) => {
     where("day", ">=", Timestamp.fromDate(firstDay)),
     where("day", "<=", Timestamp.fromDate(lastDay)),
   ];
-  console.log("First Day", firstDay, "Last day", lastDay);
   const currentMonthQuery = query(collectionRef, ...rangeConditions);
   try {
     const result = await getDocs(currentMonthQuery);

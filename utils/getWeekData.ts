@@ -44,8 +44,6 @@ export const getFinalValue = (data: FirebaseCalendar[]) => {
     finalData.push(item?.value ?? 0);
   });
 
-  console.log("final data for day", finalData);
-
   const sum = finalData.reduce((a, b) => a + b, 0);
   const avg = sum / finalData.length || 0;
 

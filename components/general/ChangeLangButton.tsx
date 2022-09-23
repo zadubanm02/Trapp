@@ -13,7 +13,6 @@ const ChangeLangButton = () => {
     return (locale = "sk");
   }
   const onChangeLanguage = () => {
-    console.log("Locale", locale);
     push(asPath, undefined, { locale: locale == "sk" ? "en" : "sk" });
   };
   return (

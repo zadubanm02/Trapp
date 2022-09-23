@@ -45,7 +45,6 @@ const registerWithGoogle = async () => {
 const registerWithFacebook = async () => {
   try {
     const result = await signInWithPopup(auth, facebookProvider);
-    console.log("RESULT in AUTH.ts", result);
     const user = result.user;
     await addDoc(collection(db, "users"), {
       uid: user.uid,
@@ -55,7 +54,6 @@ const registerWithFacebook = async () => {
     });
     return user;
   } catch (error) {
-    console.log("RESULT in AUTH.ts", { error });
     throw error;
   }
 };

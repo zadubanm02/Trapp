@@ -37,7 +37,6 @@ const getFriendsData = async (userId: string) => {
     friendsIds.push(doc.data().friendId);
   });
 
-  console.log("Friend Ids", friendsIds);
   // Get actual friends data
   const usersConditions = [where("uid", "in", friendsIds)];
 
@@ -45,7 +44,6 @@ const getFriendsData = async (userId: string) => {
   const usersResult = await getDocs(dataQuery);
   usersResult.docs.forEach((doc) => {
     const docData = doc.data();
-    console.log("Found", doc);
     friends.push({
       displayName: docData.displayName,
       value: docData.value ?? 0,
@@ -69,11 +67,12 @@ const getUserByEmail = async (email: string) => {
   return user;
 };
 
-const addFriend = async (friendId: string) => {
+const addFriend = async (friendId: string, userId: string) => {
+  console.log("Friend ID", friendId);
   const collectionRef = collection(db, `users/${userId}/friends`);
 
   const result = await addDoc(collectionRef, {
-    friendId,
+    friendId: friendId,
   });
 };
 

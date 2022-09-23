@@ -26,7 +26,6 @@ const PointModal = ({
   changeValue,
   data,
 }: ModalProps) => {
-  console.log("DATA in component", data);
   return (
     <Modal
       closeButton

@@ -31,7 +31,6 @@ export const useCalendar = ({ firstDay, lastDay, userId }: Calendar) => {
     setLoading((prevState) => !prevState);
     getCalendarData({ firstDay, lastDay, userId })
       .then((result) => {
-        console.log("DATAA", result);
         return setData(result);
       })
       .catch((err) => setError(err));
@@ -42,7 +41,6 @@ export const useCalendar = ({ firstDay, lastDay, userId }: Calendar) => {
     setLoading((prevState) => !prevState);
     getCalendarData({ firstDay, lastDay, userId })
       .then((result) => {
-        console.log("DATAA", result);
         setWeekState(getWeekData(result));
         setFinalState(getFinalValue(result));
         return setData(result);
@@ -55,7 +53,6 @@ export const useCalendar = ({ firstDay, lastDay, userId }: Calendar) => {
     setLoading((prevState) => !prevState);
     getCalendarData({ firstDay, lastDay, userId })
       .then((result) => {
-        console.log("Refreshed", result);
         return setData(result);
       })
       .catch((err) => setError(err));

@@ -3,6 +3,8 @@ import React, { useCallback, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { EmailData } from "../../apiCalls/sendEmail";
 import { useAuth } from "../../hooks/useAuth";
+import { useFriends } from "../../hooks/useFriends";
+import { Friend } from "../../types";
 import { addOrSendEmail } from "../../utils/addOrSendEmail";
 import { fakeFriends } from "../../utils/fakeData";
 import AddFriendModal from "../general/AddFriendModal";
@@ -10,17 +12,19 @@ import FriendModal from "../general/FriendModal";
 import RowFriend, { InternalFriend } from "./RowFriend";
 
 const FriendList = () => {
+  const { user } = useAuth();
   const [friendEmail, setFriendEmail] = React.useState<string>("");
   const [visible, setVisible] = useState(false);
   const [friendModalVisible, setFriendModalVisible] = useState<boolean>(false);
-  const [selectedFriend, setSelectedFriend] = useState<
-    InternalFriend | undefined
-  >(undefined);
-  const { user } = useAuth();
+  const { friends } = useFriends(user?.uid as string);
+  // const [selectedFriend, setSelectedFriend] = useState<
+  //   InternalFriend | undefined
+  // >(undefined);
+  const [selectedFriend, setSelectedFriend] = useState<Friend | undefined>(
+    undefined
+  );
   const handler = () => setVisible(true);
-  const save = () => {
-    return console.log("Add friend");
-  };
+
   const closeHandler = () => {
     setVisible(false);
     setFriendEmail("");
@@ -37,7 +41,7 @@ const FriendList = () => {
         name ?? "Trapp"
       } is invited to use Trapp ! Join in to share your grades !`,
     };
-    addOrSendEmail(data);
+    addOrSendEmail(data, user?.uid as string);
     setVisible(false);
   };
   const changeValue = useCallback(
@@ -52,15 +56,14 @@ const FriendList = () => {
         <h2 className="font-bold text-gray-700 text-2xl mb-4 dark:text-slate-50">
           <FormattedMessage id="page.home.friends.title" />
         </h2>
-        {fakeFriends.map((friend) => {
+        {friends.map((friend) => {
           return (
             <RowFriend
               clickHandler={() => {
                 setSelectedFriend(friend);
                 setFriendModalVisible(true);
-                console.log("Selected Friend", selectedFriend);
               }}
-              name={friend.name}
+              name={friend.displayName}
               email={friend.email}
               value={friend.value}
             />

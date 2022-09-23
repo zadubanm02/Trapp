@@ -67,7 +67,6 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
 
   const closeHandler = () => {
     setVisible(false);
-    console.log("closed");
   };
   const previousMonth = () => {
     setFirstDay(add(firstDay, { months: -1 }));
@@ -120,7 +119,6 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
   const changeValue = useCallback(
     (e: React.ChangeEvent<FormElement>) => {
       setValue(parseInt(e.target.value));
-      console.log("Value", value);
     },
     [value]
   );
