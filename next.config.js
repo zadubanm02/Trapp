@@ -8,6 +8,15 @@ const nextConfig = {
     // The default locale you want to be used when visiting a non-locale prefixed path e.g. `/hello`
     defaultLocale: "sk",
   },
+  redirects: () => {
+    return [
+      {
+        source: '/',
+        destination: '/login',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
