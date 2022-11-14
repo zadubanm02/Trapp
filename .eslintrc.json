@@ -1,14 +1,17 @@
 {
   "extends": "next/core-web-vitals",
-  "jest": true,
+  //"jest": true,
   "overrides": [
     {
       "files": [
         "**/*.spec.tsx"
-      ],
-      "env": {
-        "jest": true
-      }
+      ]
+      // "env": {
+      //   "jest": true
+      // }
     }
-  ]
+  ],
+  "rules": {
+    "react-hooks/rules-of-hooks": "off"
+  }
 }

@@ -14,7 +14,6 @@ import { evaluateMessage, getEmoji } from "../../utils/evaluateMessage";
 import { finalStateAtom } from "../../state/finalState";
 import { NextPage } from "next";
 import { onMessage } from "firebase/messaging";
-import { messaging, retrieveMessagingToken } from "../../firebase";
 
 const Home: NextPage = () => {
   const { user } = useAuth();
@@ -28,7 +27,7 @@ const Home: NextPage = () => {
     if (!user) {
       router.push("/login");
     }
-  }, []);
+  }, [router, user]);
 
   return (
     <div className="h-screen dark:bg-slate-800">

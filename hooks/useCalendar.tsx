@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
-import { getCalendarData, valueDay } from "../firebase/calendar";
+import { getCalendarData, updateValue, valueDay } from "../firebase/calendar";
 import { finalStateAtom } from "../state/finalState";
 import { weekStateAtom } from "../state/weekStat";
 import { Calendar, FirebaseCalendar, ValueDay } from "../types";
@@ -37,6 +37,21 @@ export const useCalendar = ({ firstDay, lastDay, userId }: Calendar) => {
     setLoading((prevState) => !prevState);
   }, []);
 
+  const refreshValue = useCallback(
+    ({ firstDay, lastDay, userId }: Calendar) => {
+      console.log("Updating using refreshValue fn");
+      setLoading((prevState) => !prevState);
+      getCalendarData({ firstDay, lastDay, userId })
+        .then((result) => {
+          updateValue({ userId: userId, value: getFinalValue(result) });
+          return setData(result);
+        })
+        .catch((err) => setError(err));
+      setLoading((prevState) => !prevState);
+    },
+    []
+  );
+
   useEffect(() => {
     setLoading((prevState) => !prevState);
     getCalendarData({ firstDay, lastDay, userId })
@@ -65,5 +80,6 @@ export const useCalendar = ({ firstDay, lastDay, userId }: Calendar) => {
     loading,
     rateDate,
     refresh,
+    refreshValue,
   };
 };

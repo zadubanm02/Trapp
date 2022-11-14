@@ -3,10 +3,11 @@ import React from "react";
 import Image from "next/image";
 import { InternalFriend } from "../new/RowFriend";
 import { FormattedMessage } from "react-intl";
+import { Friend } from "../../types";
 
 interface ModalProps {
   visible: boolean;
-  friend: InternalFriend | undefined;
+  friend: Friend | undefined;
   closeHandler: () => void;
   saveData: () => void;
 }
@@ -32,7 +33,7 @@ const FriendModal = ({
           id="modal-title"
           className="font-bold text-2xl dark:text-slate-50"
         >
-          {friend?.name}
+          {friend?.displayName}
         </Text>
       </Modal.Header>
       <Modal.Body className="m-5 text-center">
@@ -48,7 +49,7 @@ const FriendModal = ({
         <Text className="my-3 dark:text-slate-50 text-center">
           <FormattedMessage
             id="modal.friend.text"
-            values={{ name: friend?.name }}
+            values={{ name: friend?.displayName }}
           />{" "}
           &#9996;
         </Text>

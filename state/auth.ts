@@ -14,6 +14,7 @@ const initialAtom = atom<User | null>(getInitialValue());
 const authAtom = atom(
   (get) => get(initialAtom),
   (_get, set, newState: User | null) => {
+    //@ts-ignore
     set(initialAtom, newState);
     localStorage.setItem("user", JSON.stringify(newState));
   }

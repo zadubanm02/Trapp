@@ -44,12 +44,9 @@ const FriendList = () => {
     addOrSendEmail(data, user?.uid as string);
     setVisible(false);
   };
-  const changeValue = useCallback(
-    (e: React.ChangeEvent<FormElement>) => {
-      setFriendEmail(e.target.value);
-    },
-    [friendEmail]
-  );
+  const changeValue = useCallback((e: React.ChangeEvent<FormElement>) => {
+    setFriendEmail(e.target.value);
+  }, []);
   return (
     <>
       <div className="my-5  w-80 items-center">
@@ -59,6 +56,7 @@ const FriendList = () => {
         {friends.map((friend) => {
           return (
             <RowFriend
+              key={friend.email}
               clickHandler={() => {
                 setSelectedFriend(friend);
                 setFriendModalVisible(true);

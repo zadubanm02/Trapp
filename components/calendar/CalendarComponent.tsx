@@ -45,11 +45,13 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
       end: endOfMonth(firstDay),
     })
   );
-  const { data, error, loading, rateDate, refresh } = useCalendar({
-    firstDay: firstDay,
-    lastDay: endOfMonth(firstDay),
-    userId,
-  });
+  const { data, error, loading, rateDate, refresh, refreshValue } = useCalendar(
+    {
+      firstDay: firstDay,
+      lastDay: endOfMonth(firstDay),
+      userId,
+    }
+  );
   const [visible, setVisible] = React.useState(false);
   const [value, setValue] = useState<number>(0);
 
@@ -61,7 +63,7 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
 
   const save = async () => {
     await rateDate({ day: selectedDay, userId, value });
-    refresh({ firstDay, lastDay, userId });
+    refreshValue({ firstDay, lastDay, userId });
     setVisible(false);
   };
 
@@ -114,14 +116,11 @@ export const CalendarComponent = ({ userId }: CalendarProps) => {
       })
     );
     refresh({ firstDay, lastDay, userId });
-  }, [firstDay, currentMonth]);
+  }, [firstDay, currentMonth, lastDay, refresh, userId]);
 
-  const changeValue = useCallback(
-    (e: React.ChangeEvent<FormElement>) => {
-      setValue(parseInt(e.target.value));
-    },
-    [value]
-  );
+  const changeValue = useCallback((e: React.ChangeEvent<FormElement>) => {
+    setValue(parseInt(e.target.value));
+  }, []);
 
   return (
     <>

@@ -14,13 +14,17 @@ import {
   addDoc,
   collection,
   doc,
+  getDocs,
   getFirestore,
+  query,
   setDoc,
+  where,
 } from "firebase/firestore";
 import { app } from ".";
 
 const auth = getAuth(app);
 const db = getFirestore(app);
+const usersRef = collection(db, "users");
 
 const provider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
@@ -83,8 +87,14 @@ const registerWithEmail = async ({
   password,
 }: RegisterData): Promise<User> => {
   try {
-    const result = await createUserWithEmailAndPassword(auth, email, password);
+    const resultPromise = createUserWithEmailAndPassword(auth, email, password);
+    const foundUserPromise = getUserByEmail(email);
+    const result = await resultPromise;
     const user = result.user;
+    const foundUser = await foundUserPromise;
+    if (foundUser) {
+      return user;
+    }
     // custom doc id for better querying
     await setDoc(doc(db, `users`, user.uid), {
       uid: user.uid,
@@ -121,6 +131,20 @@ const sendPasswordReset = async (email: string) => {
 
 const logout = () => {
   signOut(auth);
+};
+
+const getUserByEmail = async (email: string) => {
+  let user: any = null;
+  const dataQuery = query(usersRef, where("email", "==", email));
+  const result = await getDocs(dataQuery);
+  if (result.docs.length === 0) {
+    return null;
+  }
+  result.docs.forEach((doc) => {
+    const docData = doc.data();
+    user = docData;
+  });
+  return user;
 };
 
 export {

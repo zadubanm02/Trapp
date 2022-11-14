@@ -16,6 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { locale } = useRouter();
 
   return (
+    // @ts-ignore
     <IntlProvider locale={locale as string} messages={messages[locale]}>
       <ThemeProvider attribute="class">
         <Component {...pageProps} />

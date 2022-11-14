@@ -7,6 +7,9 @@ import {
   addDoc,
   Timestamp,
   getDoc,
+  setDoc,
+  doc,
+  updateDoc,
 } from "firebase/firestore";
 import { app } from ".";
 import { Calendar, ValueDay } from "../types";
@@ -49,6 +52,22 @@ const getCalendarData = async ({ firstDay, lastDay, userId }: Calendar) => {
   }
 };
 
+const updateValue = async ({
+  userId,
+  value,
+}: {
+  userId: string;
+  value: number;
+}) => {
+  try {
+    await updateDoc(doc(db, `users`, userId), {
+      value,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 const valueDay = async ({ day, value, userId }: ValueDay) => {
   const collectionRef = collection(db, `users/${userId}/days`);
 
@@ -58,4 +77,4 @@ const valueDay = async ({ day, value, userId }: ValueDay) => {
   });
 };
 
-export { getCalendarData, valueDay };
+export { getCalendarData, valueDay, updateValue };

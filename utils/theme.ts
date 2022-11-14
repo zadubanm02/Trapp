@@ -1,4 +1,4 @@
-const theme = {
+export const theme = {
   light: {
     text: {
       title: "text-gray-700",
