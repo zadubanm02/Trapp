@@ -3,7 +3,7 @@ import { User } from "firebase/auth";
 
 const getInitialValue = () => {
   if (typeof window !== "undefined") {
-    const localItem = localStorage.getItem("user") ?? "";
+    const localItem = localStorage.getItem("user") ?? "{}";
     // Perform localStorage action
     const item = JSON.parse(localItem);
     return item == "" ? null : item;
