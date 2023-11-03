@@ -25,7 +25,7 @@ export const app = initializeApp(firebaseConfig);
 // export const retrieveMessagingToken = async () => {
 //   return await getToken(messaging, {
 //     vapidKey:
-//       "BIq2QgDWdQz4nNih9LIJ0zBzizIyq3GNZvsuqEplHwPXAwC-uBMlKbku_4zMXhCcdzlVAr4y6D19xNC6VAshKKY",
+//       "",
 //   });
 // };
 //const analytics = getAnalytics(app);
